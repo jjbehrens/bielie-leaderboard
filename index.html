@@ -57,6 +57,24 @@ nav.tabs{display:flex;flex-wrap:wrap;gap:6px}
 nav.tabs a{color:var(--moss);text-decoration:none;font-weight:600;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--rule);background:transparent}
 nav.tabs a:hover{color:var(--chalk);border-color:var(--moss)}
 nav.tabs a[aria-current="page"]{background:var(--chalk);color:var(--turf);border-color:var(--chalk)}
+.navs{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+nav.modes{display:flex;border:2px solid var(--flag)}
+nav.modes a{color:var(--flag);text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px}
+nav.modes a[aria-current="page"]{background:var(--flag);color:var(--flag-ink)}
+.ov .colhead,.ov .row{grid-template-columns:3.2em minmax(0,1fr) 3em 3em 5em}
+.ov .colhead{letter-spacing:.08em}
+.divview{background:var(--board);border:1px solid var(--rule);display:flex;flex-direction:column;min-width:0}
+.dhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:14px 16px 12px;border-bottom:3px solid var(--rule)}
+.dhead h2{margin:0;font-family:var(--font-display);font-weight:900;font-size:1.9rem;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.dhead h2 em{font-style:normal;color:var(--flag)}
+.dhead .meta{font-size:.85rem;color:var(--moss)}
+.divgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:0;align-items:start}
+.divgrid .board{border:0;border-right:1px solid var(--rule)}
+.divgrid .board:last-child{border-right:0}
+.bhead.sub{padding:10px 16px;border-bottom:1px solid var(--rule)}
+.bhead.sub h3{margin:0;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);font-weight:700}
+.bhead.sub h3 em{font-style:normal;color:var(--flag);font-family:var(--font-display);font-size:1.3rem;letter-spacing:.06em;font-weight:800}
+.divview .bfoot{border-top:1px solid var(--rule)}
 .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .btn{cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--rule);background:var(--board);color:var(--chalk);font-weight:600;font-size:.9rem}
 .btn:hover{border-color:var(--moss)}
@@ -119,6 +137,15 @@ body.proj .projbar:hover,body.proj .projbar:focus-within{opacity:1}
 body.proj .view{flex:1;min-height:0;display:flex;flex-direction:column}
 body.proj .boards{grid-template-columns:1fr;flex:1;min-height:0}
 body.proj .board{height:100%;display:flex;flex-direction:column}
+body.proj .divview{flex:1;min-height:0}
+body.proj .divgrid{flex:1;min-height:0;align-items:stretch}
+body.proj .divgrid.n2{grid-template-columns:1fr 1fr}
+body.proj .divgrid.n1{grid-template-columns:1fr}
+body.proj .dhead h2{font-size:5.4vh}
+body.proj .dhead .meta{font-size:2.2vh}
+body.proj .bhead.sub h3{font-size:1.8vh}
+body.proj .bhead.sub h3 em{font-size:3.2vh}
+body.proj .divview .bfoot{font-size:1.6vh}
 body.proj .bhead h2{font-size:5.4vh}
 body.proj .bhead .meta{font-size:2.2vh}
 body.proj .cols.c2{grid-template-columns:1fr 1fr}
@@ -142,6 +169,7 @@ body.proj .rot{display:block}
 @media (max-width:640px){
   .colhead,.row{grid-template-columns:2.6em minmax(0,1fr) 2.6em 3.6em;gap:8px;padding:0 12px}
   .row{padding-block:7px}
+  .ov .colhead,.ov .row{grid-template-columns:2.4em minmax(0,1fr) 2.2em 2.2em 4.2em;gap:6px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -156,14 +184,14 @@ body.proj .rot{display:block}
       <h1>Bielie Leaderboard <span>2026</span></h1>
     </div>
     <div class="progress" aria-live="polite">
-      <div class="count"><span id="countIn">0</span> / <span id="countAll">70</span><small>Day 1 scores in</small></div>
+      <div class="count"><span id="countIn">0</span> / <span id="countAll">70</span><small id="countLabel">Day 1 scores in</small></div>
       <div class="bar"><i id="barFill"></i></div>
       <div class="updated" id="updated">Waiting for scores</div>
     </div>
   </header>
 
   <div class="toolbar">
-    <nav class="tabs" id="tabs" aria-label="Leaderboards"></nav>
+    <div class="navs"><nav class="modes" id="modes" aria-label="Day 1 or Overall"></nav><nav class="tabs" id="tabs" aria-label="Leaderboards"></nav></div>
     <div class="tools">
       <span class="src" id="srcLabel"></span>
       <label class="btn" for="fileInput" id="loadBtn">Load workbook<input type="file" id="fileInput" accept=".xlsm,.xlsx,.xls"></label>
@@ -172,7 +200,7 @@ body.proj .rot{display:block}
   </div>
 
   <div class="notice sample-hint" id="sampleNote" hidden>
-    <span><b>Sample scores</b>&nbsp; These are made-up scores so you can see the layout. Load your workbook, or put data.js next to this page, to show real Day 1 scores.</span>
+    <span><b>Sample scores</b>&nbsp; These are made-up scores so you can see the layout. Load your workbook, or put data.js next to this page, to show real scores.</span>
     <button class="btn" type="button" id="clearSample">Show empty boards</button>
   </div>
 
@@ -193,15 +221,51 @@ body.proj .rot{display:block}
 /* Roster from Bielie_Leaderboard_2026_V13.xlsm (Players table): Div, Surname, Name, CH. Used for the sample preview only. */
 const ROSTER = [["A", "Marx", "Christoff", 0], ["A", "Smit", "Johan", 0], ["A", "Norman", "Norest", 1], ["A", "Combrink", "Luzaan", 2], ["A", "Hattingh", "Rikus", 3], ["A", "Robbertse", "Stef", 4], ["A", "Sanyane", "Walter", 5], ["A", "Bouwer", "Barend", 6], ["A", "De Wet", "Riekus", 6], ["A", "Masilo", "Simon", 7], ["B", "Behrens", "Esme", 8], ["B", "Gerber", "Hendru", 8], ["B", "Masilo", "Thabang", 8], ["B", "Niemand", "Pieter", 8], ["B", "van den Heever", "Koos", 8], ["B", "Blaauw", "Jannik", 9], ["B", "Robbertse", "Tiff", 9], ["B", "van Vuuren", "Heinrich", 9], ["B", "Behrens", "JJ", 10], ["B", "Jacobs", "Jaco", 10], ["B", "Butler", "Jaco", 11], ["B", "Munyai", "David", 11], ["B", "Robbertse", "Kobus", 11], ["B", "Shongwane", "Jerry", 11], ["B", "Molepolle", "Buks", 12], ["B", "Steyn", "Francois", 12], ["B", "Bezuidenhout", "Eugene", 13], ["B", "Hol", "Quintin", 13], ["B", "Mashela", "Peter", 13], ["B", "Modubu", "Gladwin", 13], ["B", "Sepolwana", "Isaac", 13], ["B", "Buthali", "Trinity", 14], ["B", "Dikgang", "Frank", 14], ["B", "Hol", "Keith", 14], ["B", "Tlhabadira", "Kamogelo", 14], ["B", "Jacobs", "Estelle", 15], ["B", "Kleynhans", "Nico", 15], ["B", "Potgieter", "Anton", 15], ["B", "Steenkamp", "Pieter", 15], ["B", "Davis", "Chris", 16], ["B", "Jacobs", "Herman", 16], ["B", "Mochocho", "Samuel", 16], ["B", "de Jager", "Andries", 17], ["B", "Kanapi", "Piet", 17], ["B", "Lamprecht", "Naude", 17], ["B", "Sebolayi", "Gift", 17], ["B", "van den Berg", "Jaco", 17], ["C", "Behrens", "Chappies", 14], ["C", "Prinsloo", "Johan", 16], ["C", "Botha", "Vaughn", 18], ["C", "Mankge", "Andrew", 18], ["C", "Tau", "Joe", 18], ["C", "de Beer", "Peet", 19], ["C", "de Bruyn", "Vincent", 19], ["C", "du Plessis", "Jan Stefaans", 19], ["C", "Botha", "Ruan", 20], ["C", "Posthumus", "Karel", 20], ["C", "Potgieter", "Jacques", 20], ["C", "Rakodi", "Abram", 20], ["C", "Blaauw", "Jacques", 21], ["C", "Stander", "Werner", 21], ["C", "Ungerer", "Jan", 21], ["C", "Potgieter", "Johan", 22], ["C", "du Plessis", "Danie", 23], ["C", "Esterhuizen", "Wynand", 23], ["C", "Steenkamp", "Alex", 27], ["C", "Minnaar", "Louis", 30], ["C", "Jacobs", "Sarah-Jane", 37], ["C", "Bouwer", "Vilicia", 43], ["C", "de Wet", "Riku", 43]];
 
-const BOARDS = [
-  {id:"a-gross", div:"A", key:"g", label:"Division A", kind:"Gross", col:"D1 Gross", dir:1, rule:"lowest score wins"},
-  {id:"a-nett",  div:"A", key:"n", label:"Division A", kind:"Nett",  col:"D1 Nett",  dir:1, rule:"lowest score wins"},
-  {id:"b-gross", div:"B", key:"g", label:"Division B", kind:"Gross", col:"D1 Gross", dir:1, rule:"lowest score wins"},
-  {id:"b-nett",  div:"B", key:"n", label:"Division B", kind:"Nett",  col:"D1 Nett",  dir:1, rule:"lowest score wins"},
-  {id:"c-points",div:"C", key:"p", label:"Division C", kind:"Points",col:"D1 Points",dir:-1,rule:"highest points wins"},
+/* Same five categories as the Share D1 and Display Overall sheets. */
+const CATS = [
+  {c:"a-gross", div:"A", m:"g", label:"Division A", kind:"Gross",  dir:1,  rule:"lowest score wins"},
+  {c:"a-nett",  div:"A", m:"n", label:"Division A", kind:"Nett",   dir:1,  rule:"lowest score wins"},
+  {c:"b-gross", div:"B", m:"g", label:"Division B", kind:"Gross",  dir:1,  rule:"lowest score wins"},
+  {c:"b-nett",  div:"B", m:"n", label:"Division B", kind:"Nett",   dir:1,  rule:"lowest score wins"},
+  {c:"c-points",div:"C", m:"p", label:"Division C", kind:"Points", dir:-1, rule:"highest points wins"},
 ];
-const VIEWS = [{id:"overview",name:"Overview"},{id:"podium",name:"Podium"}].concat(BOARDS.map(b=>({id:b.id,name:b.div+" "+b.kind})));
-const ROTATION = ["podium"].concat(BOARDS.map(b=>b.id));
+const MODES = {
+  day1:    {home:"overview", podium:"podium", name:"Day 1", eyebrow:"Day 1 · Live scores", count:"Day 1 scores in",
+            podiumTitle:"Day 1 podium · top 3", boardsTitle:"Full Day 1 boards",
+            boards: CATS.map(c=>({...c, id:c.c, key:c.m, col:"D1 "+c.kind, day:"Day 1", mode:"day1"}))},
+  day2:    {home:"day2", podium:"day2-podium", name:"Day 2", eyebrow:"Day 2 · Live scores", count:"Day 2 scores in",
+            podiumTitle:"Day 2 podium · top 3", boardsTitle:"Full Day 2 boards",
+            boards: CATS.map(c=>({...c, id:"day2-"+c.c, key:c.m+"2", col:"D2 "+c.kind, day:"Day 2", mode:"day2"}))},
+  overall: {home:"overall", podium:"overall-podium", name:"Overall", eyebrow:"Overall · Day 1 + Day 2", count:"players with both rounds in",
+            podiumTitle:"Overall podium · top 3", boardsTitle:"All divisions · ranked by overall score",
+            boards: CATS.map(c=>({...c, id:"overall-"+c.c, key:c.m+"o", d1:c.m, d2:c.m+"2", col:"Overall", mode:"overall"}))},
+};
+const ALLBOARDS = MODES.day1.boards.concat(MODES.day2.boards, MODES.overall.boards);
+/* Overall screens follow the Display Overall sheet: one division per screen, Gross and Nett side by side,
+   15 players per page (Division C: Points in two columns, 30 per page). */
+const OV = b => MODES.overall.boards.find(x=>x.c===b);
+const DIVS = [
+  {id:"overall-a", div:"A", label:"Division A", boards:[OV("a-gross"),OV("a-nett")], per:15},
+  {id:"overall-b", div:"B", label:"Division B", boards:[OV("b-gross"),OV("b-nett")], per:15},
+  {id:"overall-c", div:"C", label:"Division C", boards:[OV("c-points")], per:30, split:2},
+];
+const MAXPAGES = 6;
+function viewsFor(mode){ const M=MODES[mode];
+  const v=[{id:M.home,name:"Overview"},{id:M.podium,name:"Podium"}];
+  if (mode!=="overall") return v.concat(M.boards.map(b=>({id:b.id,name:b.div+" "+b.kind})));
+  DIVS.forEach(d=>{ v.push({id:d.id,name:d.label}); for(let k=2;k<=MAXPAGES;k++) v.push({id:d.id+"-"+k,name:d.label,hidden:true,div:d,page:k}); });
+  DIVS.forEach(d=>{ const x=v.find(y=>y.id===d.id); x.div=d; x.page=1; });
+  return v; }
+const VIEWS = ["day1","day2","overall"].flatMap(m=>viewsFor(m).map(v=>({...v,mode:m})));
+const divCount = d => Math.max(...d.boards.map(b=>ranked(b).length));
+const divPages = d => Math.max(1, Math.min(MAXPAGES, Math.ceil(divCount(d)/d.per)));
+function rotationFor(mode){
+  if (mode!=="overall") return [MODES[mode].podium].concat(MODES[mode].boards.map(b=>b.id));
+  const r=[MODES.overall.podium];
+  DIVS.forEach(d=>{ for(let k=1;k<=divPages(d);k++) r.push(k===1?d.id:d.id+"-"+k); });
+  return r; }
+/* overall.html opens on the Overall boards, day2.html on Day 2; any other file name opens on Day 1 */
+const DEFAULT_VIEW = /overall/i.test(location.pathname) ? "overall" : /day2/i.test(location.pathname) ? "day2" : "overview";
 
 let state = {players:[], updated:null, source:"none", sample:false};
 let lastSig = "";
@@ -212,24 +276,36 @@ const $ = id => document.getElementById(id);
 const num = v => { if (v===null||v===undefined) return null; if (typeof v==="number") return isFinite(v)?v:null;
   const s=String(v).trim().replace(",","."); if(!s) return null; const n=Number(s); return isFinite(n)?n:null; };
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sum = (a,b) => (a===null||b===null) ? null : a+b;   // overall only once both rounds are in, as in the workbook
 
-/* players: [div, surname, name, ch, gross, nett, points] in workbook row order */
+/* rows: [div, surname, name, ch, d1 gross, d1 nett, d1 points, d2 gross, d2 nett, d2 points] in workbook row order */
 function normalise(rows){
   return rows.filter(r=>r && r[0]).map((r,i)=>{
-    const div=String(r[0]).trim().toUpperCase(), ch=num(r[3]), g=num(r[4]);
-    let n=num(r[5]); if(n===null && g!==null && ch!==null && div!=="C") n=g-ch;
-    return {idx:i, div, name:(String(r[1]||"").trim()+", "+String(r[2]||"").trim()).replace(/^, |, $/g,""), ch, g, n:div==="C"?null:n, p:div==="C"?num(r[6]):null};
+    const div=String(r[0]).trim().toUpperCase(), ch=num(r[3]), isC = div==="C";
+    const g=num(r[4]), g2=num(r[7]);
+    let n=num(r[5]);  if(n===null  && g!==null  && ch!==null && !isC) n=g-ch;
+    let n2=num(r[8]); if(n2===null && g2!==null && ch!==null && !isC) n2=g2-ch;
+    const p = isC?num(r[6]):null, p2 = isC?num(r[9]):null;
+    return {idx:i, div, name:(String(r[1]||"").trim()+", "+String(r[2]||"").trim()).replace(/^, |, $/g,""), ch,
+      g, n:isC?null:n, p, g2, n2:isC?null:n2, p2,
+      go:sum(g,g2), no:isC?null:sum(n,n2), po:sum(p,p2), sur:String(r[1]||"").trim(), first:String(r[2]||"").trim()};
+  }).map((p,_,all)=>{
+    const ini=p.first.charAt(0).toUpperCase();
+    const clash=all.filter(q=>q.sur.toLowerCase()===p.sur.toLowerCase() && q.first.charAt(0).toUpperCase()===ini).length>1;
+    p.short = clash ? (p.sur+" "+p.first) : (p.sur+(ini?" "+ini+".":""));
+    return p;
   });
 }
+const scoreKey = p => [p.g,p.n,p.p,p.g2,p.n2,p.p2].join();
 
 function setData(rows, updated, source, sample){
   const players = normalise(rows);
-  const sig = JSON.stringify(players.map(p=>[p.div,p.name,p.ch,p.g,p.n,p.p]));
+  const sig = JSON.stringify(players.map(p=>[p.div,p.name,p.ch,scoreKey(p)]));
   if (sig===lastSig && source===state.source) { state.updated = updated || state.updated; paintMeta(); return; }
   // remember which rows changed so they flash once
   freshKeys = new Set();
-  if (lastSig && !state.sample) players.forEach(p=>{ const k=p.div+"|"+p.name, v=[p.g,p.n,p.p].join(); if(prevScores.has(k) && prevScores.get(k)!==v) freshKeys.add(k); });
-  prevScores = new Map(players.map(p=>[p.div+"|"+p.name,[p.g,p.n,p.p].join()]));
+  if (lastSig && !state.sample) players.forEach(p=>{ const k=p.div+"|"+p.name; if(prevScores.has(k) && prevScores.get(k)!==scoreKey(p)) freshKeys.add(k); });
+  prevScores = new Map(players.map(p=>[p.div+"|"+p.name,scoreKey(p)]));
   lastSig = sig;
   state = {players, updated, source, sample:!!sample};
   render();
@@ -245,11 +321,14 @@ function ranked(b){
   });
 }
 const inDiv = d => state.players.filter(p=>p.div===d).length;
-const hasDay1 = p => p.div==="C" ? p.p!==null : p.g!==null;
+const counted = (p,mode) => { const sfx = {day1:"",day2:"2",overall:"o"}[mode]; return p.div==="C" ? p["p"+sfx]!==null : p["g"+sfx]!==null; };
+const modeOf = view => (VIEWS.find(v=>v.id===view)||VIEWS[0]).mode;
 
 function paintMeta(){
-  const all = state.players.length, inn = state.players.filter(hasDay1).length;
-  $("countIn").textContent = inn; $("countAll").textContent = all;
+  const mode = modeOf(currentView), M = MODES[mode];
+  const all = state.players.length, inn = state.players.filter(p=>counted(p,mode)).length;
+  $("countIn").textContent = inn; $("countAll").textContent = all; $("countLabel").textContent = M.count;
+  $("eyebrowText").textContent = M.eyebrow;
   $("barFill").style.width = all ? (inn/all*100)+"%" : "0";
   let up = "Waiting for scores";
   if (state.sample) up = "Sample data";
@@ -262,50 +341,79 @@ function paintMeta(){
 
 function podiumCard(b){
   const top = ranked(b).filter(r=>r.pos<=3).slice(0,3);
-  let rows = top.map((r,i)=>`<div class="prow${r.pos===1?" first":""}"><span class="pos">${r.tied?"T":""}${r.pos}</span><span class="nm">${esc(r.p.name)}</span><span class="sc">${r.score}</span></div>`).join("");
+  const ov = b.mode==="overall";
+  let rows = top.map(r=>`<div class="prow${r.pos===1?" first":""}"><span class="pos">${r.tied?"T":""}${r.pos}</span><span class="nm">${esc(ov?r.p.short:r.p.name)}</span><span class="sc">${r.score}</span></div>`).join("");
   for (let i=top.length;i<3;i++) rows += `<div class="prow empty"><span class="pos">${i+1}</span><span class="nm">—</span><span class="sc"></span></div>`;
-  return `<section class="pcard"><h3><a href="#${b.id}">${b.label} · ${b.kind}</a><span>${b.dir>0?"Low":"High"}</span></h3>${rows}</section>`;
+  return `<section class="pcard"><h3><a href="#${ov?"overall-"+b.div.toLowerCase():b.id}">${b.label} · ${b.kind}</a><span>${b.dir>0?"Low":"High"}</span></h3>${rows}</section>`;
 }
-function podium(){
-  return `<div class="podium-wrap" style="display:flex;flex-direction:column;gap:12px;flex:1"><h2 class="section-title">Day 1 podium · top 3</h2><div class="podium">${BOARDS.map(podiumCard).join("")}</div></div>`;
+function podium(mode){
+  const M = MODES[mode];
+  return `<div class="podium-wrap" style="display:flex;flex-direction:column;gap:12px;flex:1"><h2 class="section-title">${M.podiumTitle}</h2><div class="podium">${M.boards.map(podiumCard).join("")}</div></div>`;
 }
 
-function board(b, proj){
-  const list = ranked(b), total = inDiv(b.div);
-  const head = `<div class="bhead"><h2>${b.label} · <em>${b.kind}</em></h2><span class="meta">Day 1 · ${list.length} of ${total} players scored</span></div>`;
-  const colhead = `<div class="colhead"><span>Pos</span><span>Player</span><span class="r">HCP</span><span class="r">${b.col}</span></div>`;
-  if (!list.length) return `<section class="board" id="b-${b.id}">${head}<div class="emptystate"><strong>No scores yet</strong>Scores appear here as they are entered in the Players sheet.</div></section>`;
+const show = v => v===null||v===undefined ? "–" : v;
+function board(b, proj, o={}){
+  const all = ranked(b), total = inDiv(b.div), ov = b.mode==="overall";
+  const list = o.from!==undefined ? all.slice(o.from, o.from+o.count) : all;
+  const meta = `${b.day||""} · ${all.length} of ${total} players scored`;
+  const head = o.sub ? `<div class="bhead sub"><h3><em>${b.kind}</em> · ranked by overall</h3></div>`
+                     : `<div class="bhead"><h2>${b.label} · <em>${b.kind}</em></h2><span class="meta">${meta}</span></div>`;
+  const colhead = ov
+    ? `<div class="colhead"><span>Pos</span><span>Player</span><span class="r">D1</span><span class="r">D2</span><span class="r">Overall</span></div>`
+    : `<div class="colhead"><span>Pos</span><span>Player</span><span class="r">HCP</span><span class="r">${b.col}</span></div>`;
+  if (!all.length) return `<section class="board${ov?" ov":""}" id="b-${b.id}">${head}<div class="emptystate"><strong>${ov?"No overall scores yet":"No scores yet"}</strong>${ov?"Players appear here once both their Day 1 and Day 2 scores are entered.":"Scores appear here as they are entered in the Players sheet."}</div></section>`;
   const rowsHtml = list.map(r=>{
-    const k=r.p.div+"|"+r.p.name;
-    return `<div class="row${r.pos===1?" lead":""}${freshKeys.has(k)?" fresh":""}"><span class="pos">${r.tied?"T":""}${r.pos}</span><span class="nm">${esc(r.p.name)}</span><span class="hcp r">${r.p.ch??""}</span><span class="sc r">${r.score}</span></div>`;
+    const k=r.p.div+"|"+r.p.name, cls=`row${r.pos===1?" lead":""}${freshKeys.has(k)?" fresh":""}`, pos=`<span class="pos">${r.tied?"T":""}${r.pos}</span><span class="nm">${esc(ov?r.p.short:r.p.name)}</span>`;
+    return ov
+      ? `<div class="${cls}">${pos}<span class="hcp r">${show(r.p[b.d1])}</span><span class="hcp r">${show(r.p[b.d2])}</span><span class="sc r">${r.score}</span></div>`
+      : `<div class="${cls}">${pos}<span class="hcp r">${r.p.ch??""}</span><span class="sc r">${r.score}</span></div>`;
   });
   let ncol = 1;
-  if (proj) ncol = list.length>30?3:list.length>14?2:1;
-  const per = Math.ceil(rowsHtml.length/ncol);
-  const rh = proj ? Math.min(window.innerHeight*0.075, (window.innerHeight*0.6)/Math.max(per,8)) : 0;
+  if (o.ncol) ncol = o.ncol; else if (proj) ncol = list.length>30?3:list.length>14?2:1;
+  const per = Math.max(1, Math.ceil(rowsHtml.length/ncol));
+  const rh = proj ? Math.min(window.innerHeight*0.075, (window.innerHeight*0.6)/Math.max(o.rows||per,8)) : 0;
   let colsHtml = "";
   for (let c=0;c<ncol;c++) colsHtml += `<div>${colhead}${rowsHtml.slice(c*per,(c+1)*per).join("")}</div>`;
-  const waiting = total - list.length;
-  return `<section class="board" id="b-${b.id}">${head}<div class="cols c${ncol}"${proj?` style="--rh:${rh.toFixed(1)}px"`:""}>${colsHtml}</div>
-    <div class="bfoot"><span>T = tied · ${b.rule}</span><span>${waiting>0?waiting+" still to come in":"All scores in"}</span></div></section>`;
+  const waiting = total - all.length;
+  const foot = o.sub ? "" : `<div class="bfoot"><span>T = tied · ${b.rule}</span><span>${waiting>0?waiting+" still to come in":"All scores in"}</span></div>`;
+  return `<section class="board${ov?" ov":""}" id="b-${b.id}">${head}<div class="cols c${ncol}"${proj?` style="--rh:${rh.toFixed(1)}px"`:""}>${colsHtml}</div>${foot}</section>`;
 }
 
-let currentView = "overview";
+/* One Display Overall screen: a division with its categories side by side. page=0 shows everyone. */
+function divView(d, proj, page){
+  const cnt = divCount(d), pages = divPages(d), total = inDiv(d.div);
+  const paged = proj && page>0, from = paged ? (page-1)*d.per : undefined;
+  const opts = {sub:true, from, count:d.per, ncol: proj && d.split ? d.split : 1, rows: paged ? Math.ceil(d.per/(d.split||1))+1 : undefined};
+  const pageTxt = paged && pages>1 ? ` · page ${page} of ${pages}` : "";
+  return `<section class="divview" id="d-${d.id}">
+    <div class="dhead"><h2>Overall · <em>${d.label}</em></h2><span class="meta">${cnt} of ${total} players scored · ranked by overall score${pageTxt}</span></div>
+    <div class="divgrid n${d.boards.length}">${d.boards.map(b=>board(b,proj,opts)).join("")}</div>
+    <div class="bfoot"><span>T = tied position · ${d.div==="C"?"Points: highest wins":"Gross / Nett: lowest wins"} · Overall = Day 1 + Day 2</span><span>${total-cnt>0?(total-cnt)+" still to complete both rounds":"All scores in"}</span></div>
+  </section>`;
+}
+
+let currentView = DEFAULT_VIEW;
 function render(){
-  paintMeta();
   const proj = document.body.classList.contains("proj");
+  const mode = modeOf(currentView), M = MODES[mode];
+  paintMeta();
   let html;
-  if (currentView==="overview") html = podium() + `<h2 class="section-title" style="margin-top:12px">Full Day 1 boards</h2><div class="boards">${BOARDS.map(b=>board(b,false)).join("")}</div>`;
-  else if (currentView==="podium") html = podium();
-  else { const b = BOARDS.find(x=>x.id===currentView); html = `<div class="boards">${board(b,proj)}</div>`; }
+  const V = VIEWS.find(v=>v.id===currentView);
+  if (currentView===M.home) html = podium(mode) + `<h2 class="section-title" style="margin-top:12px">${M.boardsTitle}</h2>` +
+      (mode==="overall" ? DIVS.map(d=>divView(d,false,0)).join("") : `<div class="boards">${M.boards.map(b=>board(b,false)).join("")}</div>`);
+  else if (currentView===M.podium) html = podium(mode);
+  else if (V && V.div) html = divView(V.div, proj, proj ? Math.min(V.page, divPages(V.div)) : 0);
+  else { const b = ALLBOARDS.find(x=>x.id===currentView); html = `<div class="boards">${board(b,proj)}</div>`; }
   $("view").innerHTML = html;
   $("view").style.gap = "20px"; $("view").style.display = "flex"; $("view").style.flexDirection = "column";
-  $("tabs").innerHTML = VIEWS.map(v=>`<a href="#${v.id}"${v.id===currentView?' aria-current="page"':""}>${v.name}</a>`).join("");
+  $("modes").innerHTML = Object.entries(MODES).map(([k,m])=>`<a href="#${m.home}"${k===mode?' aria-current="page"':""}>${m.name}</a>`).join("");
+  const curTab = V && V.div ? V.div.id : currentView;
+  $("tabs").innerHTML = VIEWS.filter(v=>v.mode===mode && !v.hidden).map(v=>`<a href="#${v.id}"${v.id===curTab?' aria-current="page"':""}>${v.name}</a>`).join("");
 }
 
 function route(){
   const h = location.hash.replace("#","");
-  currentView = VIEWS.some(v=>v.id===h) ? h : "overview";
+  currentView = VIEWS.some(v=>v.id===h) ? h : DEFAULT_VIEW;
   render();
 }
 window.addEventListener("hashchange", route);
@@ -345,7 +453,8 @@ async function readWorkbook(buf){
   const col = n => H.indexOf(n);
   const ix = [col("DIV"),col("VAN"),col("NAAM"),col("CH"),col("D1 GROSS"),col("D1 NETT"),col("D1 POINTS")];
   if (ix.some(i=>i<0)) throw new Error("The Players sheet is missing one of: DIV, VAN, NAAM, CH, D1 Gross, D1 Nett, D1 Points.");
-  return rows.slice(hi+1).filter(r=>r && r[ix[0]]).map(r=>ix.map(i=>r[i]));
+  const ix2 = [col("D2 GROSS"),col("D2 NETT"),col("D2 POINTS")];   // optional
+  return rows.slice(hi+1).filter(r=>r && r[ix[0]]).map(r=>ix.concat(ix2).map(i=>i<0?null:r[i]));
 }
 const stamp = () => new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
 
@@ -382,16 +491,17 @@ function showError(msg){
 /* ---------- sample preview ---------- */
 function sampleRows(){
   let seed = 2026; const rnd = () => (seed = (seed*16807) % 2147483647) / 2147483647;
-  return ROSTER.map(([div,s,n,ch],i)=>{
-    if (rnd()<0.18) return [div,s,n,ch,"","",""];
-    if (div==="C") return [div,s,n,ch,"","",Math.round(28+rnd()*14)];
-    const g = Math.round(71+ch+(rnd()*12-4)); return [div,s,n,ch,g,g-ch,""];
+  const round = (div,ch) => { if (div==="C") return ["","",Math.round(28+rnd()*14)]; const g=Math.round(71+ch+(rnd()*12-4)); return [g,g-ch,""]; };
+  return ROSTER.map(([div,s,n,ch])=>{
+    if (rnd()<0.12) return [div,s,n,ch,"","","","","",""];
+    const d1 = round(div,ch), d2 = rnd()<0.3 ? ["","",""] : round(div,ch);
+    return [div,s,n,ch].concat(d1,d2);
   });
 }
-$("clearSample").addEventListener("click", ()=> setData(ROSTER.map(r=>r.concat(["","",""])), null, "none", false));
+$("clearSample").addEventListener("click", ()=> setData(ROSTER.map(r=>r.concat(["","","","","",""])), null, "none", false));
 
-/* ---------- projector mode ---------- */
-let rotTimer=null, rotStart=0, rotPaused=false, rotIdx=0, rotRaf=null;
+/* ---------- projector mode: rotates through the boards of the mode on screen ---------- */
+let rotTimer=null, rotStart=0, rotPaused=false, rotIdx=0, rotRaf=null, rotList=rotationFor("day1"), rotMode="day1";
 function secs(){ return Number($("projSecs").value)||15; }
 function tickBar(){
   if (!document.body.classList.contains("proj")) return;
@@ -399,16 +509,17 @@ function tickBar(){
   if (pct!==null) $("rotFill").style.width = (pct*100)+"%";
   rotRaf = requestAnimationFrame(tickBar);
 }
-function nextBoard(){ rotIdx = (rotIdx+1)%ROTATION.length; location.hash = ROTATION[rotIdx]; rotStart = Date.now(); }
+function nextBoard(){ rotList = rotationFor(rotMode); const i = rotList.indexOf(currentView); rotIdx = (i+1)%rotList.length; location.hash = rotList[rotIdx]; rotStart = Date.now(); }
 function startRot(){ clearInterval(rotTimer); rotStart=Date.now(); rotTimer=setInterval(()=>{ if(!rotPaused) nextBoard(); }, secs()*1000); }
 $("projBtn").addEventListener("click", ()=>{
-  document.body.classList.add("proj"); rotIdx=0; location.hash=ROTATION[0]; render(); startRot(); tickBar();
+  rotMode = modeOf(currentView); rotList = rotationFor(rotMode);
+  document.body.classList.add("proj"); rotIdx=0; location.hash=rotList[0]; render(); startRot(); tickBar();
   document.documentElement.requestFullscreen?.().catch(()=>{});
   navigator.wakeLock?.request("screen").catch(()=>{});
 });
 $("projSecs").addEventListener("change", startRot);
 $("projPause").addEventListener("click", ()=>{ rotPaused=!rotPaused; $("projPause").textContent = rotPaused?"Resume":"Pause"; if(!rotPaused){rotStart=Date.now();} });
-function exitProj(){ document.body.classList.remove("proj"); clearInterval(rotTimer); cancelAnimationFrame(rotRaf); if (document.fullscreenElement) document.exitFullscreen().catch(()=>{}); location.hash="overview"; render(); }
+function exitProj(){ document.body.classList.remove("proj"); clearInterval(rotTimer); cancelAnimationFrame(rotRaf); if (document.fullscreenElement) document.exitFullscreen().catch(()=>{}); location.hash=MODES[rotMode].home; render(); }
 $("projExit").addEventListener("click", exitProj);
 document.addEventListener("keydown", e=>{ if (!document.body.classList.contains("proj")) return;
   if (e.key==="Escape") exitProj(); else if (e.key==="ArrowRight"||e.key===" ") { e.preventDefault(); nextBoard(); startRot(); } });
