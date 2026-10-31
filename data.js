@@ -1,9 +1,8 @@
 // Bielie Leaderboard 2026 - Day 1 data. Written by the ExportWebData macro.
 // Columns: Div, Surname, Name, CH, D1 Gross, D1 Nett, D1 Points, D2 Gross, D2 Nett, D2 Points
-window.BIELIE_DATA = {"updated":"17:43","players":[
+window.BIELIE_DATA = {"updated":"17:47","players":[
 ["A","Marx","Christoff",-1,75,76,"","","",""],
 ["A","Smit","Johan",-1,71,72,"","","",""],
-["A","Norman","Norest",1,"","","","","",""],
 ["A","Combrink","Luzaan",2,78,76,"","","",""],
 ["A","Hattingh","Rikus",3,79,76,"","","",""],
 ["A","Robbertse","Stef",4,"","","","","",""],
@@ -32,7 +31,6 @@ window.BIELIE_DATA = {"updated":"17:43","players":[
 ["B","Mashela","Peter",13,90,77,"","","",""],
 ["B","Modubu","Gladwin",13,78,65,"","","",""],
 ["B","Sepolwana","Isaac",13,"","","","","",""],
-["B","Buthali","Trinity",14,"","","","","",""],
 ["B","Dikgang","Frank",14,"","","","","",""],
 ["B","Hol","Keith",14,91,77,"","","",""],
 ["B","Tlhabadira","Kamogelo",14,87,73,"","","",""],
@@ -44,7 +42,6 @@ window.BIELIE_DATA = {"updated":"17:43","players":[
 ["B","Jacobs","Herman",16,97,81,"","","",""],
 ["B","Mochocho","Samuel",16,90,74,"","","",""],
 ["B","de Jager","Andries",17,104,87,"","","",""],
-["B","Kanapi","Piet",17,"","","","","",""],
 ["B","Lamprecht","Naude",17,95,78,"","","",""],
 ["B","Sebolayi","Gift",17,82,65,"","","",""],
 ["B","van den Berg","Jaco",17,94,77,"","","",""],
@@ -68,7 +65,6 @@ window.BIELIE_DATA = {"updated":"17:43","players":[
 ["C","Esterhuizen","Wynand",23,"","",32,"","",""],
 ["C","Steenkamp","Alex",27,"","",21,"","",""],
 ["C","Minnaar","Louis",30,"","",28,"","",""],
-["C","Jacobs","Sarah-Jane",37,"","","","","",""],
 ["C","Bouwer","Vilicia",43,"","",37,"","",""],
 ["C","de Wet","Riku",43,"","",37,"","",""]
 ]};
