@@ -1,6 +1,6 @@
 // Bielie Leaderboard 2026 - Day 1 data. Written by the ExportWebData macro.
 // Columns: Div, Surname, Name, CH, D1 Gross, D1 Nett, D1 Points
-window.BIELIE_DATA = {"updated":"20:55","players":[
+window.BIELIE_DATA = {"updated":"07:18","players":[
 ["A","Marx","Christoff",0,"","",""],
 ["A","Smit","Johan",0,"","",""],
 ["A","Norman","Norest",1,"","",""],
@@ -8,7 +8,7 @@ window.BIELIE_DATA = {"updated":"20:55","players":[
 ["A","Hattingh","Rikus",3,"","",""],
 ["A","Robbertse","Stef",4,"","",""],
 ["A","Sanyane","Walter",5,"","",""],
-["A","Bouwer","Barend",6,66,60,""],
+["A","Bouwer","Barend",6,"","",""],
 ["A","De Wet","Riekus",6,"","",""],
 ["A","Masilo","Simon",7,"","",""],
 ["B","Behrens","Esme",8,"","",""],
